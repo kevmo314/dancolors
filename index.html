@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Colors for Dan</title>
+    <script src="https://www.color-blindness.com/color-name-hue-tool/js/ntc.js"></script>
+    <style>
+      html,
+      body,
+      #camera {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #color {
+        padding: 16px;
+        background-color: white;
+        margin-top: 200px;
+      }
+    </style>
+    <script type="text/javascript">
+      document.addEventListener("DOMContentLoaded", function () {
+        var video = document.getElementById("camera");
+        var canvas = document.getElementById("canvas");
+
+        if (navigator.mediaDevices.getUserMedia) {
+          navigator.mediaDevices
+            .getUserMedia({ video: true })
+            .then(function (stream) {
+              video.srcObject = stream;
+
+              var ctx = canvas.getContext("2d");
+              setInterval(function () {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                var data = ctx.getImageData(
+                  canvas.width / 2,
+                  canvas.height / 2,
+                  1,
+                  1
+                ).data;
+
+                var r = data[0].toString(16).padStart(2, "0");
+                var g = data[1].toString(16).padStart(2, "0");
+                var b = data[2].toString(16).padStart(2, "0");
+
+                var result = ntc.name("#" + r + g + b);
+
+                document.getElementById("color").innerText =
+                  result[1] + " - " + result[3];
+              }, 2500);
+            })
+            .catch(function (err) {
+              console.error(err);
+            });
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <video autoplay="true" id="camera"></video>
+    <div class="overlay">⌖</div>
+    <div class="overlay">
+      <div id="color"></div>
+    </div>
+    <canvas id="canvas"></canvas>
+  </body>
+</html>
