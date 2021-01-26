@@ -39,6 +39,10 @@
         text-align: center;
         white-space: pre;
       }
+
+      #canvas {
+        display: none;
+      }
     </style>
     <script type="text/javascript">
       document.addEventListener("DOMContentLoaded", function () {
@@ -57,15 +61,25 @@
               setInterval(function () {
                 ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
                 var data = ctx.getImageData(
-                  canvas.width / 2,
-                  canvas.height / 2,
-                  1,
-                  1
+                  canvas.width / 2 - 4,
+                  canvas.height / 2 - 4,
+                  8,
+                  8
                 ).data;
 
-                var r = data[0].toString(16).padStart(2, "0");
-                var g = data[1].toString(16).padStart(2, "0");
-                var b = data[2].toString(16).padStart(2, "0");
+                var r = 0,
+                  g = 0,
+                  b = 0;
+
+                for (var i = 0; i < 64; i++) {
+                  r += data[4 * i + 0];
+                  g += data[4 * i + 1];
+                  b += data[4 * i + 2];
+                }
+
+                r = (r / 64).toString(16).padStart(2, "0");
+                g = (g / 64).toString(16).padStart(2, "0");
+                b = (b / 64).toString(16).padStart(2, "0");
 
                 var result = ntc.name("#" + r + g + b);
 
