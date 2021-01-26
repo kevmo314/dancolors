@@ -35,7 +35,9 @@
         padding: 16px;
         background-color: white;
         margin-top: 360px;
-        font-size: 36pt;
+        font-size: 24pt;
+        text-align: center;
+        white-space: pre;
       }
     </style>
     <script type="text/javascript">
@@ -68,7 +70,7 @@
                 var result = ntc.name("#" + r + g + b);
 
                 document.getElementById("color").innerText =
-                  result[1] + " - " + result[3];
+                  result[1] + "\n" + result[3];
               }, 2500);
             })
             .catch(function (err) {
